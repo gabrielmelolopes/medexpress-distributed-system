@@ -22,3 +22,48 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# ======================
+# Java / Spring Boot
+# ======================
+target/
+*.class
+*.log
+*.jar
+
+# ======================
+# Node / React
+# ======================
+node_modules/
+build/
+dist/
+
+# ======================
+# IDEs
+# ======================
+.vscode/
+.idea/
+*.iml
+
+# ======================
+# Sistema
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# Env / Config
+# ======================
+.env
+.env.local
+
+# ======================
+# Logs
+# ======================
+logs/
+*.log
+
+# ======================
+# Docker (opcional)
+# ======================
+docker-data/
