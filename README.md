@@ -99,4 +99,14 @@ Cliente realiza pedido
 
 ---
 
+## 🎨 Protótipo (Figma)
+
+O design da interface foi desenvolvido no Figma, incluindo as principais telas do sistema:
+
+- Página inicial (catálogo de produtos)  
+- Tela de login/cadastro  
+- Fluxo de navegação entre telas  
+
+👉 [Acessar protótipo](https://www.figma.com/design/Sw00utxXg0m4Z7AtF6t92L/Sem-t%C3%ADtulo?node-id=0-1&t=vNxjRv2xfY5YZcAq-1)
+
 ## 📦 Estrutura do projeto
