@@ -1,6 +1,3 @@
-# medexpress-distributed-system
-Farmácia online com rastreamento de pedidos em tempo real utilizando arquitetura hexagonal e processamento assíncrono com mensageria.
-
 # 💊 MedExpress
 
 Sistema de farmácia online com rastreamento de pedidos em tempo real, desenvolvido com foco em arquitetura distribuída e processamento assíncrono.
@@ -63,7 +60,7 @@ O sistema utiliza processamento orientado a eventos, permitindo que os pedidos s
 #### 🔄 Fluxo:
 
 Cliente realiza pedido  
-→ Evento é gerado  
+→ Evento de pedido é publicado  
 → Enviado para fila  
 → Worker consome  
 → Processa pedido  
@@ -110,3 +107,10 @@ O design da interface foi desenvolvido no Figma, incluindo as principais telas d
 👉 [Acessar protótipo](https://www.figma.com/design/Sw00utxXg0m4Z7AtF6t92L/Sem-t%C3%ADtulo?node-id=0-1&t=vNxjRv2xfY5YZcAq-1)
 
 ## 📦 Estrutura do projeto
+│
+├── frontend/
+├── backend/
+├── worker/
+├── docker/
+├── README.md
+├── .gitignore
