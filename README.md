@@ -204,6 +204,10 @@ docker run -d \
   --name activemq \
   rmohr/activemq
 
+  ou 
+
+docker run -d -p 8161:8161 -p 61616:61616 --name activemq rmohr/activemq
+
 ## 📊 Diagramas da Arquitetura
 
 ### 🔹 Contexto (C4 - Nível 1)
