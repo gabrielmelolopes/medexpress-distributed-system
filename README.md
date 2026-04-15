@@ -204,6 +204,23 @@ docker run -d \
   --name activemq \
   rmohr/activemq
 
-  ou 
+## 📊 Diagramas da Arquitetura
 
-docker run -d -p 8161:8161 -p 61616:61616 --name activemq rmohr/activemq
+### 🔹 Contexto (C4 - Nível 1)
+Representa a visão geral do sistema e sua interação com usuários e sistemas externos.
+
+![Contexto](./diagramas/Contexto.jpeg)
+
+---
+
+### 🔹 Containers (C4 - Nível 2)
+Mostra os principais blocos da aplicação, como serviços, APIs e banco de dados.
+
+![Containers](./diagramas/Container.jpeg)
+
+---
+
+### 🔹 Componentes / Classes (C4 - Nível 3)
+Detalha a estrutura interna do sistema, incluindo classes e responsabilidades.
+
+![Diagrama de Classes](./diagramas/Diagrama%20de%20Classes.jpeg)
