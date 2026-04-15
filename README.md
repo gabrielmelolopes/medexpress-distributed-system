@@ -191,3 +191,15 @@ Garantir que o sistema:
 - Interface simples e intuitiva
 - Navegação sem necessidade de login
 - Feedback visual claro ao usuário
+  
+---
+
+#### 🚀Subindo o ActiveMQ com Docker
+
+Execute o comando abaixo para iniciar o broker de mensageria:
+
+docker run -d \
+  -p 8161:8161 \
+  -p 61616:61616 \
+  --name activemq \
+  rmohr/activemq
