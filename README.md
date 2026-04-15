@@ -114,3 +114,80 @@ O design da interface foi desenvolvido no Figma, incluindo as principais telas d
 ├── docker/
 ├── README.md
 ├── .gitignore
+
+---
+
+## 🏅 Qualidade
+
+### 📄 Plano de Testes
+
+O sistema **MedExpress** será validado por meio de testes funcionais e não funcionais, garantindo que todas as funcionalidades operem corretamente e atendam aos requisitos definidos.
+
+#### 🎯 Objetivo
+Garantir que o sistema:
+- Funcione corretamente para o usuário final
+- Seja confiável e seguro
+- Suporte múltiplos acessos simultâneos
+- Entregue uma boa experiência de uso
+
+---
+
+### 🧪 Cenários de Teste
+
+#### 🔐 Autenticação
+- Login com dados válidos → deve autenticar
+- Login com dados inválidos → deve exibir erro
+- Cadastro de novo usuário → deve criar conta com sucesso
+
+#### 🛍️ Navegação de Produtos
+- Acessar catálogo sem login → deve funcionar normalmente
+- Visualizar detalhes de um produto → deve exibir informações corretas
+
+#### 🛒 Carrinho e Pedido
+- Adicionar produto ao carrinho → deve incrementar corretamente
+- Remover produto → deve atualizar o carrinho
+- Finalizar compra sem login → deve solicitar autenticação
+- Finalizar compra logado → deve criar pedido
+
+#### 📦 Rastreamento de Pedido
+- Pedido criado → status inicial **PROCESSANDO**
+- Atualização via sistema → status muda para **ENVIADO**
+- Entrega finalizada → status **ENTREGUE**
+- Atualização em tempo real → frontend deve refletir mudanças
+
+#### 🔄 Processamento Assíncrono
+- Envio de pedido → evento deve ser publicado
+- Evento enviado para fila → deve ser processado
+- Worker consome mensagem → pedido processado corretamente
+- Atualização de status → refletida no sistema
+
+---
+
+### ⚙️ Requisitos Não-Funcionais
+
+#### 🚀 Performance
+- O sistema deve responder em até **2 segundos**
+- Deve suportar múltiplos usuários simultâneos
+
+#### 🔒 Segurança
+- Dados sensíveis devem ser protegidos
+- Autenticação obrigatória para operações críticas
+- Uso de HTTPS em ambiente de produção
+
+#### 📈 Escalabilidade
+- Sistema preparado para crescimento de usuários
+- Uso de mensageria (**ActiveMQ**) para processamento assíncrono
+
+#### 🔄 Disponibilidade
+- Sistema deve ter alta disponibilidade
+- Falhas no backend não devem impactar o frontend
+
+#### 🔧 Manutenibilidade
+- Arquitetura baseada em **Hexagonal Architecture**
+- Baixo acoplamento entre componentes
+- Facilidade de manutenção e evolução
+
+#### 🌐 Usabilidade
+- Interface simples e intuitiva
+- Navegação sem necessidade de login
+- Feedback visual claro ao usuário
