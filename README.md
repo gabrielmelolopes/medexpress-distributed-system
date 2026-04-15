@@ -104,7 +104,7 @@ O design da interface foi desenvolvido no Figma, incluindo as principais telas d
 - Tela de login/cadastro  
 - Fluxo de navegação entre telas  
 
-👉 [Acessar protótipo]([https://www.figma.com/design/Sw00utxXg0m4Z7AtF6t92L/Sem-t%C3%ADtulo?node-id=0-1&t=vNxjRv2xfY5YZcAq-1](https://www.figma.com/site/0UWqvwXKueswp96giWlsnh/Prot%C3%B3tipo-Figma---MedExpress?node-id=0-1&t=N9Xlb3XNffvtx5n0-1))
+👉 [Acessar protótipo](https://www.figma.com/site/0UWqvwXKueswp96giWlsnh/Prot%C3%B3tipo-Figma---MedExpress?node-id=0-1&t=N9Xlb3XNffvtx5n0-1)
 
 ## 📦 Estrutura do projeto
 │
