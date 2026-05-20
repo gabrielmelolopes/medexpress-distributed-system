@@ -16,10 +16,18 @@ public class EstoqueService {
     }
 
     public void salvarProduto(Produto produto){
-        if(repository.buscarPorId(produto.getId()) != null){
-            throw new NegocioException("Não é possível salvar: ID " + produto.getId() + " já está em uso.");
+        String nomeCheck = repository.buscarPorNome(produto.getNome());
+
+        if(nomeCheck != null){
+            throw new NegocioException("Não foi possivel salvar o produto: '" + produto.getNome() + "' já esta cadastrado.");
         }
 
+        if(produto.getPreco() < 0 || produto.getQuantidade() < 0){
+            throw new NegocioException("Preço ou quantidade não podem ser negativos");
+        }
+        if(produto.getQuantidade() > 250){
+            throw new NegocioException("Quantidades acima de 250 exigem aprovação da diretoria");
+        }
         if(produto.getPreco() > 5000){
             throw new NegocioException("Produtos acima de R$ 5000 exigem aprovação da diretoria");
         }
@@ -63,6 +71,20 @@ public class EstoqueService {
         }
         if(novoproduto.getPreco() < 0 || novoproduto.getQuantidade() < 0){
             throw new NegocioException("Preço ou quantidade não podem ser negativos");
+        }
+        if(novoproduto.getPreco() > 5000){
+            throw new NegocioException("Produtos acima de R$ 5000 exigem aprovação da diretoria");
+        }
+        if(novoproduto.getQuantidade() > 250){
+            throw new NegocioException("Quantidades acima de 250 exigem aprovação da diretoria");
+        }
+        if(!novoproduto.getNome().equals(produtoantigo.getNome())){
+
+            String nomeChecker = repository.buscarPorNome(novoproduto.getNome());
+
+            if(nomeChecker != null){
+                throw new NegocioException("Não é possível alterar o nome: '" + novoproduto.getNome() + "' já esta cadastrado.");
+            }
         }
 
         return repository.atualizarProduto(id, novoproduto);

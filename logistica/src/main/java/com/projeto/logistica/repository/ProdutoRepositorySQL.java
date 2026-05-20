@@ -7,6 +7,7 @@ import com.projeto.logistica.model.Produto;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,6 +154,24 @@ public class ProdutoRepositorySQL implements ProdutoRepository {
             return produto;
         }catch (SQLException e){
             System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public String buscarPorNome(String nome) {
+        String sql = "SELECT nome FROM produto WHERE LOWER(nome) = LOWER(?)";
+
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, nome);
+            try(ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    return rs.getString("nome");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao verificar nome: " + e.getMessage());
         }
         return null;
     }

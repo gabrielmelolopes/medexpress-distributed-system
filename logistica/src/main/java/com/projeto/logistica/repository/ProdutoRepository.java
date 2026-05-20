@@ -11,4 +11,5 @@ public interface ProdutoRepository {
     List<Produto> listarTodos();
     void registrarVenda(int id, int novaQuantidade, int quantidadeVendida);
     Produto atualizarProduto(int id, Produto produto);
+    String buscarPorNome(String nome);
 }
