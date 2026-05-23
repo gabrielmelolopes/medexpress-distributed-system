@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order saved = orderRepository.save(order);
 
-        // Publica na fila — MessageConsumer processa de forma assíncrona.
+        // Publica na fila MessageConsumer processa de forma assíncrona.
         try {
             String msg = String.format(
                     "NOVO_PEDIDO|orderId=%d|clientId=%d|clientName=%s|itens=%d|status=%s",
