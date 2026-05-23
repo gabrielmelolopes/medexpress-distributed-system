@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedExpress | Rastrear Pedido</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="shared.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="overlay" class="overlay"></div>
+
+<!-- Header -->
+<header class="top-bar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid px-4 align-items-center gap-3">
+            <a class="navbar-brand logo-text" href="index.html">MedExpress</a>
+            <form class="d-flex search-bar flex-grow-1" onsubmit="return false;">
+                <input class="form-control" type="search" id="campoBusca" placeholder="Buscar medicamentos, cosméticos e mais...">
+                <button class="btn btn-busca" type="button"><i class="bi bi-search"></i></button>
+            </form>
+            <ul class="navbar-nav d-flex flex-row gap-3 align-items-center flex-shrink-0">
+                <li class="nav-item" id="navLogin">
+                    <a class="nav-link nav-action" href="login.html">
+                        <i class="bi bi-person me-1"></i>
+                        <span id="labelLogin">Login / Cadastro</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-action position-relative" href="#" id="btnAbrirCarrinho">
+                        <i class="bi bi-cart3 fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill badge-carrinho">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-action active" href="rastreamento.html">
+                        <i class="bi bi-box-seam me-1"></i>Rastrear Pedido
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- SideBar Carrinho -->
+<div id="sidebarCarrinho" class="carrinho">
+    <div class="carrinho-header">
+        <h5 class="mb-0"><i class="bi bi-cart3 me-2"></i>Meu Carrinho</h5>
+        <button id="btnFecharCarrinho" class="btn-fechar">&times;</button>
+    </div>
+    <div id="listaCarrinho" class="lista-carrinho"></div>
+    <div class="carrinho-footer">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <strong>Total:</strong>
+            <span class="total-valor">R$ <span id="totalCarrinho">0,00</span></span>
+        </div>
+        <button class="btn btn-finalizar w-100" id="btnFinalizarCompra">
+            <i class="bi bi-bag-check me-2"></i>Finalizar Compra
+        </button>
+    </div>
+</div>
+
+<!-- MAIN -->
+<main class="rastreamento-page">
+    <div class="container px-3">
+
+        <!-- Hero -->
+        <div class="rastreamento-hero">
+            <h2><i class="bi bi-box-seam me-2"></i>Rastrear Pedidos</h2>
+            <p>Acompanhe o status de todos os seus pedidos em tempo real.</p>
+            <div class="busca-pedido">
+                <input type="text" id="inputBuscaPedido" placeholder="Buscar por nº do pedido...">
+                <button class="btn-buscar" id="btnBuscarPedido">Buscar</button>
+            </div>
+        </div>
+
+        <!-- Não logado -->
+        <div id="alertaLogin" class="d-none">
+            <div class="checkout-card text-center py-5">
+                <i class="bi bi-lock fs-1 text-muted mb-3 d-block"></i>
+                <h5 class="fw-bold">Faça login para ver seus pedidos</h5>
+                <p class="text-muted small">Você precisa estar logado para acompanhar seus pedidos.</p>
+                <a href="login.html" class="btn btn-danger rounded-pill px-4 mt-2">
+                    <i class="bi bi-person me-2"></i>Entrar na conta
+                </a>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loadingPedidos" class="d-none">
+            <div class="loading-state">
+                <div class="spinner-border" role="status"></div>
+                <span>Carregando seus pedidos...</span>
+            </div>
+        </div>
+
+        <!-- Lista de pedidos -->
+        <div id="listaPedidos"></div>
+
+    </div>
+</main>
+
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1100">
+    <div id="toastCarrinho" class="toast align-items-center text-bg-success border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body"><i class="bi bi-check-circle me-2"></i><span id="toastMsg"></span></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="shared.js"></script>
+<script>
+    /* Config Status */
+    const STATUS_CONFIG = {
+        PROCESSANDO: {
+            label: 'Processando',
+            icon:  'bi-hourglass-split',
+            step:  0,
+            badge: 'status-PROCESSANDO',
+        },
+        ENVIADO: {
+            label: 'Enviado',
+            icon:  'bi-truck',
+            step:  1,
+            badge: 'status-ENVIADO',
+        },
+        ENTREGUE: {
+            label: 'Entregue',
+            icon:  'bi-check-circle-fill',
+            step:  2,
+            badge: 'status-ENTREGUE',
+        },
+    };
+
+    const STEPS = [
+        { icon: 'bi-clock',           label: 'Processando' },
+        { icon: 'bi-truck',           label: 'Enviado'     },
+        { icon: 'bi-house-check',     label: 'Entregue'    },
+    ];
+
+    /* Render */
+    function renderizarTimeline(statusKey) {
+        const cfg  = STATUS_CONFIG[statusKey] || STATUS_CONFIG.PROCESSANDO;
+        const step = cfg.step;
+        // Barra de progresso: 0% / 50% / 100%
+        const barW = step === 0 ? '5%' : step === 1 ? '50%' : '100%';
+
+        const stepsHtml = STEPS.map((s, i) => {
+            const concluido = i < step;
+            const ativo     = i === step;
+            return `
+            <div class="timeline-step ${concluido ? 'concluido' : ''} ${ativo ? 'ativo' : ''}">
+                <div class="step-icon"><i class="bi ${s.icon}"></i></div>
+                <span class="step-label">${s.label}</span>
+            </div>`;
+        }).join('');
+
+        return `
+        <div class="timeline">
+            <div class="timeline-bar" style="width:${barW}"></div>
+            ${stepsHtml}
+        </div>`;
+    }
+
+    function formatarData(isoStr) {
+        if (!isoStr) return '—';
+        const d = new Date(isoStr);
+        return d.toLocaleDateString('pt-BR', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit',
+        });
+    }
+
+    function calcularTotal(items) {
+        return items.reduce((s, i) => s + (parseFloat(i.price) * i.quantity), 0);
+    }
+
+    function renderizarPedido(pedido) {
+        const cfg   = STATUS_CONFIG[pedido.status] || STATUS_CONFIG.PROCESSANDO;
+        const total = calcularTotal(pedido.items || []);
+
+        const itensHtml = (pedido.items || []).map(item => {
+            const p = item.product || {};
+            return `
+            <div class="pedido-item-linha">
+                <img src="${p.url_image || ''}" alt="${p.name || ''}" onerror="this.src='https://placehold.co/44x44?text=Foto'">
+                <span class="pedido-item-nome">${p.name || 'Produto'} × ${item.quantity}</span>
+                <span class="pedido-item-preco">R$ ${brl(parseFloat(item.price) * item.quantity)}</span>
+            </div>`;
+        }).join('');
+
+        return `
+        <div class="pedido-card" id="pedido-${pedido.id}">
+            <div class="pedido-header">
+                <div>
+                    <div class="pedido-id">Pedido #${pedido.id}</div>
+                    <div class="pedido-data">${formatarData(pedido.moment)}</div>
+                </div>
+                <span class="status-badge ${cfg.badge}">
+                    <i class="bi ${cfg.icon}"></i>${cfg.label}
+                </span>
+            </div>
+            <div class="pedido-body">
+                ${renderizarTimeline(pedido.status)}
+                <div class="pedido-itens">${itensHtml || '<p class="text-muted small">Nenhum item.</p>'}</div>
+                <div class="pedido-total-linha">
+                    <span>Total do pedido</span>
+                    <span>R$ ${brl(total)}</span>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    /* Busca e filtragem */
+    let todosPedidos = [];
+
+    function filtrarEExibir(termo) {
+        const listaEl = document.getElementById('listaPedidos');
+        const t = termo.trim().toLowerCase();
+
+        const filtrados = t
+            ? todosPedidos.filter(p => String(p.id).includes(t))
+            : todosPedidos;
+
+        if (filtrados.length === 0) {
+            listaEl.innerHTML = `
+            <div class="lista-vazia">
+                <i class="bi bi-search"></i>
+                <p>${t ? `Nenhum pedido encontrado para "#${t}".` : 'Você ainda não fez nenhum pedido.'}</p>
+                ${!t ? '<a href="index.html" class="btn btn-outline-danger mt-2">Ver produtos</a>' : ''}
+            </div>`;
+            return;
+        }
+
+        listaEl.innerHTML = filtrados.map(renderizarPedido).join('');
+    }
+
+    /* Init */
+    document.addEventListener("DOMContentLoaded", async () => {
+        await initCarrinho();
+
+        const user = getUsuario();
+
+        if (!user) {
+            document.getElementById('alertaLogin').classList.remove('d-none');
+            return;
+        }
+
+        // Busca todos os pedidos e filtra pelo usuário logado no front
+        const loadingEl = document.getElementById('loadingPedidos');
+        const listaEl   = document.getElementById('listaPedidos');
+        loadingEl.classList.remove('d-none');
+
+        try {
+            const todos = await apiFetch('/orders');
+            // Filtra apenas pedidos do usuário logado
+            todosPedidos = todos.filter(p => p.client?.id === user.id);
+            // Ordena do mais recente para o mais antigo
+            todosPedidos.sort((a, b) => new Date(b.moment) - new Date(a.moment));
+        } catch (e) {
+            listaEl.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Não foi possível carregar seus pedidos. Verifique se o servidor está rodando.
+            </div>`;
+            loadingEl.classList.add('d-none');
+            return;
+        }
+
+        loadingEl.classList.add('d-none');
+        filtrarEExibir('');
+
+        // Busca por número do pedido
+        const inputBusca = document.getElementById('inputBuscaPedido');
+        document.getElementById('btnBuscarPedido').addEventListener('click', () => {
+            filtrarEExibir(inputBusca.value);
+        });
+        inputBusca.addEventListener('keydown', e => {
+            if (e.key === 'Enter') filtrarEExibir(inputBusca.value);
+        });
+        inputBusca.addEventListener('input', () => {
+            if (!inputBusca.value.trim()) filtrarEExibir('');
+        });
+    });
+</script>
+</body>
+</html>

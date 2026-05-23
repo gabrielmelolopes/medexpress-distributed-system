@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedExpress | Painel Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red:       #e8192c;
+            --red-dark:  #c0121e;
+            --red-light: #fff0f1;
+            --gray-100:  #f8f9fa;
+            --gray-200:  #e9ecef;
+            --gray-400:  #ced4da;
+            --gray-600:  #6c757d;
+            --gray-800:  #343a40;
+            --font:      'Nunito', sans-serif;
+            --radius:    12px;
+            --shadow-sm: 0 1px 4px rgba(0,0,0,.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,.12);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font);
+            background: var(--gray-100);
+            color: var(--gray-800);
+            margin: 0;
+            min-height: 100vh;
+        }
+
+
+        #telaLoginAdmin {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 100%);
+        }
+
+        .admin-login-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .admin-logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--red);
+            text-align: center;
+            margin-bottom: .25rem;
+        }
+
+        .admin-logo-sub {
+            text-align: center;
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        /* Painel principal */
+        #painelAdmin { display: none; min-height: 100vh; }
+
+        .admin-sidebar {
+            width: 240px;
+            background: var(--gray-800);
+            min-height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform .3s ease;
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem 1.25rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+
+        .sidebar-logo span {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sidebar-logo small {
+            display: block;
+            font-size: .7rem;
+            color: rgba(255,255,255,.5);
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+            list-style: none;
+            margin: 0;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1.25rem;
+            color: rgba(255,255,255,.7);
+            text-decoration: none;
+            font-size: .88rem;
+            font-weight: 600;
+            transition: background .15s, color .15s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav li a:hover,
+        .sidebar-nav li a.ativo {
+            background: rgba(255,255,255,.08);
+            color: #fff;
+            border-left-color: var(--red);
+        }
+
+        .sidebar-nav li a i { font-size: 1rem; }
+
+        .sidebar-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid rgba(255,255,255,.1);
+        }
+
+        .btn-logout-sidebar {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            width: 100%;
+            background: rgba(232,25,44,.2);
+            color: #ff8a8a;
+            border: none;
+            border-radius: 8px;
+            padding: .6rem 1rem;
+            font-size: .85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .btn-logout-sidebar:hover { background: rgba(232,25,44,.35); }
+
+        /* Área principal */
+        .admin-content {
+            margin-left: 240px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .admin-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .admin-topbar h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        /*Card Estatística*/
+        .stat-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.red    { background: var(--red-light); color: var(--red); }
+        .stat-icon.blue   { background: #e7f0ff; color: #2563eb; }
+        .stat-icon.green  { background: #d1fae5; color: #059669; }
+        .stat-icon.orange { background: #fff7ed; color: #ea580c; }
+
+        .stat-info p  { margin: 0; font-size: .78rem; color: var(--gray-600); font-weight: 600; }
+        .stat-info h4 { margin: 0; font-size: 1.5rem; font-weight: 800; }
+
+        /* Seções Painel */
+        .secao { display: none; }
+        .secao.ativa { display: block; }
+
+        /*Card Formulário*/
+        .form-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-card h5 {
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .form-card h5 i { color: var(--red); }
+
+        .field-label { font-size: .82rem; font-weight: 700; color: var(--gray-800); }
+
+        .field-input {
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            padding: .55rem .85rem;
+            font-size: .9rem;
+            width: 100%;
+            font-family: var(--font);
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .field-input:focus {
+            border-color: var(--red);
+            box-shadow: 0 0 0 3px rgba(232,25,44,.1);
+            outline: none;
+        }
+
+        .btn-salvar {
+            background: var(--red);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: .65rem 1.5rem;
+            font-weight: 800;
+            font-size: .9rem;
+            cursor: pointer;
+            transition: background .2s, transform .15s;
+        }
+
+        .btn-salvar:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+        .btn-cancelar-edicao {
+            background: var(--gray-200);
+            color: var(--gray-800);
+            border: none;
+            border-radius: 8px;
+            padding: .65rem 1.25rem;
+            font-weight: 700;
+            font-size: .9rem;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .btn-cancelar-edicao:hover { background: var(--gray-400); }
+
+        /*Tabela Produtos*/
+        .table-card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .table-card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: .75rem;
+        }
+
+        .table-card-header h5 {
+            font-size: 1rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .busca-tabela {
+            display: flex;
+            gap: .5rem;
+        }
+
+        .busca-tabela input {
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            padding: .45rem .85rem;
+            font-size: .85rem;
+            font-family: var(--font);
+        }
+
+        .busca-tabela input:focus {
+            border-color: var(--red);
+            outline: none;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        thead th {
+            background: var(--gray-100);
+            padding: .75rem 1rem;
+            font-size: .75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--gray-600);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        tbody td {
+            padding: .85rem 1rem;
+            font-size: .88rem;
+            border-bottom: 1px solid var(--gray-200);
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: var(--gray-100); }
+
+        .img-thumb {
+            width: 44px; height: 44px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: var(--gray-100);
+        }
+
+        .btn-tbl {
+            border: none;
+            border-radius: 6px;
+            padding: .35rem .7rem;
+            font-size: .78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity .15s;
+        }
+
+        .btn-tbl:hover { opacity: .8; }
+        .btn-tbl.editar   { background: #dbeafe; color: #1d4ed8; }
+        .btn-tbl.deletar  { background: #fee2e2; color: #b91c1c; }
+
+        .badge-id {
+            background: var(--gray-200);
+            color: var(--gray-600);
+            border-radius: 6px;
+            padding: .15rem .5rem;
+            font-size: .75rem;
+            font-weight: 700;
+        }
+
+        /*Pedidos*/
+        .pedido-row-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--gray-100);
+            border-bottom: 1px solid var(--gray-200);
+            cursor: pointer;
+        }
+
+        .pedido-collapse-body {
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: .3rem;
+            font-size: .75rem; font-weight: 700; padding: .25rem .65rem;
+            border-radius: 20px;
+        }
+
+        .status-PROCESSANDO { background: #fff3cd; color: #856404; }
+        .status-ENVIADO     { background: #cfe2ff; color: #0a58ca; }
+        .status-ENTREGUE    { background: #d1e7dd; color: #0a3622; }
+
+        .select-status {
+            border: 1.5px solid var(--gray-200);
+            border-radius: 6px;
+            padding: .3rem .6rem;
+            font-size: .82rem;
+            font-family: var(--font);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .select-status:focus { border-color: var(--red); outline: none; }
+
+        /* Usuários */
+        .user-avatar {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: var(--red-light);
+            color: var(--red);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: .85rem;
+            flex-shrink: 0;
+        }
+
+        /* Toast */
+        .admin-toast-wrap {
+            position: fixed; bottom: 1.5rem; right: 1.5rem;
+            z-index: 9999;
+            display: flex; flex-direction: column; gap: .5rem;
+        }
+
+        .admin-toast {
+            background: var(--gray-800);
+            color: #fff;
+            border-radius: 10px;
+            padding: .75rem 1.25rem;
+            font-size: .88rem;
+            font-weight: 600;
+            display: flex; align-items: center; gap: .5rem;
+            box-shadow: var(--shadow-md);
+            animation: slideIn .25s ease;
+        }
+
+        .admin-toast.sucesso { background: #059669; }
+        .admin-toast.erro    { background: #dc2626; }
+
+        @keyframes slideIn {
+            from { transform: translateX(60px); opacity: 0; }
+            to   { transform: translateX(0);    opacity: 1; }
+        }
+
+        /* Loading */
+        .loading-row td {
+            text-align: center; padding: 2rem;
+            color: var(--gray-600); font-size: .88rem;
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar { transform: translateX(-100%); }
+            .admin-sidebar.aberta { transform: translateX(0); }
+            .admin-content { margin-left: 0; padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Tela LOGIN ADMIN -->
+<div id="telaLoginAdmin">
+    <div class="admin-login-card">
+        <div class="admin-logo">MedExpress</div>
+        <div class="admin-logo-sub">Painel Administrativo</div>
+
+        <div id="loginErro" class="alert alert-danger py-2 d-none small" role="alert">
+            <i class="bi bi-exclamation-circle me-1"></i>
+            <span id="loginErroMsg"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="field-label form-label">E-mail</label>
+            <input type="email" class="field-input" id="adminEmail" placeholder="admin@medexpress.com">
+        </div>
+        <div class="mb-4">
+            <label class="field-label form-label">Senha</label>
+            <input type="password" class="field-input" id="adminSenha" placeholder="Mínimo 6 caracteres">
+        </div>
+        <button class="btn-salvar w-100" id="btnLoginAdmin">
+            <i class="bi bi-shield-lock me-2"></i>Entrar no Painel
+        </button>
+        <div class="text-center mt-3">
+            <a href="index.html" class="text-muted small text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i>Voltar à loja
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Painel ADMIN -->
+<div id="painelAdmin">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-logo">
+            <span>MedExpress</span>
+            <small>Admin Panel</small>
+        </div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="#" class="ativo" data-secao="dashboard">
+                    <i class="bi bi-grid-1x2"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#" data-secao="produtos">
+                    <i class="bi bi-box-seam"></i> Produtos
+                </a>
+            </li>
+            <li>
+                <a href="#" data-secao="pedidos">
+                    <i class="bi bi-bag-check"></i> Pedidos
+                </a>
+            </li>
+            <li>
+                <a href="#" data-secao="usuarios">
+                    <i class="bi bi-people"></i> Usuários
+                </a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="text-white-50 small mb-2 px-1" id="adminNomeLogado"></div>
+            <button class="btn-logout-sidebar" id="btnLogoutAdmin">
+                <i class="bi bi-box-arrow-left"></i> Sair do painel
+            </button>
+        </div>
+    </aside>
+
+    <!-- Conteúdo -->
+    <main class="admin-content">
+        <div class="admin-topbar">
+            <h2 id="tituloPainel">Dashboard</h2>
+            <a href="index.html" class="btn btn-outline-secondary btn-sm rounded-pill">
+                <i class="bi bi-shop me-1"></i>Ver loja
+            </a>
+        </div>
+
+        <!-- DashBoard -->
+        <div id="secaoDashboard" class="secao ativa">
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-3">
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="bi bi-box-seam"></i></div>
+                        <div class="stat-info">
+                            <p>Produtos</p>
+                            <h4 id="statProdutos">—</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-bag-check"></i></div>
+                        <div class="stat-info">
+                            <p>Pedidos</p>
+                            <h4 id="statPedidos">—</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                        <div class="stat-info">
+                            <p>Usuários</p>
+                            <h4 id="statUsuarios">—</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="bi bi-currency-dollar"></i></div>
+                        <div class="stat-info">
+                            <p>Receita total</p>
+                            <h4 id="statReceita">—</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Últimos pedidos no dashboard -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h5><i class="bi bi-clock-history me-2" style="color:var(--red)"></i>Últimos Pedidos</h5>
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Cliente</th>
+                        <th>Itens</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tabelaUltimosPedidos">
+                    <tr class="loading-row"><td colspan="5"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRODUTOS  -->
+        <div id="secaoProdutos" class="secao">
+
+            <!-- Formulário de cadastro/edição -->
+            <div class="form-card">
+                <h5 id="formProdutoTitulo"><i class="bi bi-plus-circle"></i> Novo Produto</h5>
+
+                <input type="hidden" id="produtoIdEdicao">
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="field-label">Nome do produto *</label>
+                        <input type="text" class="field-input" id="produtoNome"
+                               placeholder="Ex: Paracetamol 500mg">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label">Preço (R$) *</label>
+                        <input type="number" class="field-input" id="produtoPreco"
+                               step="0.01" min="0" placeholder="0,00">
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label">URL da imagem</label>
+                        <input type="url" class="field-input" id="produtoImagem"
+                               placeholder="https://exemplo.com/imagem.jpg">
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label">Descrição</label>
+                        <textarea class="field-input" id="produtoDescricao" rows="2"
+                                  placeholder="Descrição breve do produto..."
+                                  style="resize:vertical;"></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn-salvar" id="btnSalvarProduto">
+                        <i class="bi bi-floppy me-1"></i>Salvar Produto
+                    </button>
+                    <button class="btn-cancelar-edicao d-none" id="btnCancelarEdicao">
+                        Cancelar edição
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabela de produtos -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h5><i class="bi bi-list-ul me-2" style="color:var(--red)"></i>Produtos Cadastrados</h5>
+                    <div class="busca-tabela">
+                        <input type="text" id="buscaProdutoTabela" placeholder="Buscar produto...">
+                    </div>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Imagem</th>
+                            <th>Nome</th>
+                            <th>Preço</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tabelaProdutos">
+                        <tr class="loading-row"><td colspan="5"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pedidos -->
+        <div id="secaoPedidos" class="secao">
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h5><i class="bi bi-bag-check me-2" style="color:var(--red)"></i>Todos os Pedidos</h5>
+                    <select class="select-status" id="filtroPedidoStatus">
+                        <option value="">Todos os status</option>
+                        <option value="PROCESSANDO">Processando</option>
+                        <option value="ENVIADO">Enviado</option>
+                        <option value="ENTREGUE">Entregue</option>
+                    </select>
+                </div>
+                <div id="listaPedidosAdmin"></div>
+            </div>
+        </div>
+
+        <!-- USUÁRIOS -->
+        <div id="secaoUsuarios" class="secao">
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h5><i class="bi bi-people me-2" style="color:var(--red)"></i>Usuários Cadastrados</h5>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tabelaUsuarios">
+                        <tr class="loading-row"><td colspan="3"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Toast container -->
+<div class="admin-toast-wrap" id="toastWrap"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
