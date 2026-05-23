@@ -1,14 +1,14 @@
 "use strict";
 
-/* ============================================================
-   login.js — MedExpress
+/*
+   login.js - MedExpress
    Depende de shared.js (carregado antes no HTML).
    NÃO redeclara nenhuma const de shared.js.
 
    Fluxo cadastro: POST /users → sucesso → tela de confirmação
                    → usuário clica "Fazer login" → modo login
    Fluxo login:    POST /users/login → salva user → redireciona
-   ============================================================ */
+*/
 
 const form         = document.getElementById('form');
 const titulo       = document.getElementById('titulo');
@@ -28,7 +28,7 @@ const mensagemErro = document.getElementById('mensagemErro');
 
 let modoCadastro = false;
 
-/* ── Toggle Login ↔ Cadastro ───────────────────────────────*/
+/* Toggle Login / Cadastro */
 toggleLink.addEventListener('click', e => {
     e.preventDefault();
     modoCadastro = !modoCadastro;
@@ -62,14 +62,14 @@ toggleLink.addEventListener('click', e => {
     }
 });
 
-/* ── Mostrar/ocultar senha ──────────────────────────────────*/
+/* Mostrar/ocultar senha */
 toggleSenha.addEventListener('click', () => {
     const visivel        = inputSenha.type === 'text';
     inputSenha.type      = visivel ? 'password' : 'text';
     iconeSenha.className = visivel ? 'bi bi-eye' : 'bi bi-eye-slash';
 });
 
-/* ── Submissão ──────────────────────────────────────────────*/
+/* Submissão */
 form.addEventListener('submit', async e => {
     e.preventDefault();
     esconderAlerta();
@@ -93,12 +93,13 @@ form.addEventListener('submit', async e => {
     }
 });
 
-/* ── LOGIN ──────────────────────────────────────────────────
+/*   
+   LOGIN
    POST /users/login
    Body:    { email, password }
    200  →   { id, name, email, password }  → salva e redireciona
    401  →   credenciais inválidas
-   ─────────────────────────────────────────────────────────*/
+   */
 async function fazerLogin() {
     let res;
     try {
@@ -142,7 +143,8 @@ async function fazerLogin() {
     window.location.href = (destino === 'checkout') ? 'checkout.html' : 'index.html';
 }
 
-/* ── CADASTRO ───────────────────────────────────────────────
+/* 
+   CADASTRO
    POST /users
    Body:    { name, email, password }
    200  →   { id, name, email, password }
@@ -150,7 +152,7 @@ async function fazerLogin() {
 
    IMPORTANTE: NÃO faz login automático após cadastro.
    Exibe tela de confirmação e pede para o usuário fazer login.
-   ─────────────────────────────────────────────────────────*/
+   */
 async function fazerCadastro() {
     let res;
     try {
@@ -180,11 +182,12 @@ async function fazerCadastro() {
     mostrarConfirmacaoCadastro(emailSalvo);
 }
 
-/* ── Tela de confirmação pós-cadastro ───────────────────────
+/*
+   Tela de confirmação pós-cadastro
    Substitui o form por uma mensagem de sucesso.
    O botão "Fazer login" restaura o form no modo login
    com o e-mail já preenchido.
-   ─────────────────────────────────────────────────────────*/
+   */
 function mostrarConfirmacaoCadastro(emailCadastrado) {
     // Esconde o formulário
     form.style.display = 'none';
@@ -226,7 +229,7 @@ function mostrarConfirmacaoCadastro(emailCadastrado) {
     });
 }
 
-/* ── Validação ──────────────────────────────────────────────*/
+/* Validação */
 function validarCampos() {
     let valido = true;
 
