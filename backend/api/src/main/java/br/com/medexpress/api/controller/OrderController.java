@@ -22,19 +22,19 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    /* GET /orders → lista todos */
+    /* GET /orders -> lista todos */
     @GetMapping
     public ResponseEntity<List<Order>> findAll() {
         return ResponseEntity.ok(orderService.findAll());
     }
 
-    /* GET /orders/{id} → busca por ID */
+    /* GET /orders/{id} -> busca por ID */
     @GetMapping("/{id}")
     public ResponseEntity<Order> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.findById(id));
     }
 
-    /* POST /orders → cria pedido */
+    /* POST /orders -: cria pedido */
     @PostMapping
     public ResponseEntity<Order> create(@RequestBody Order order) {
         Order created = orderService.createOrder(order);
@@ -70,7 +70,7 @@ public class OrderController {
             Order atualizado = orderService.updateStatus(id, novoStatus);
             return ResponseEntity.ok(atualizado);
         } catch (IllegalStateException e) {
-            // Transição de status inválida (ex: ENTREGUE → PROCESSANDO)
+            // Transição de status inválida (ex: ENTREGUE -> PROCESSANDO)
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
             // Pedido não encontrado
