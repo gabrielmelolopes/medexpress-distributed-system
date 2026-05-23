@@ -4,225 +4,428 @@ Sistema de farmácia online com rastreamento de pedidos em tempo real, desenvolv
 
 ---
 
-## 📌 Sobre o projeto
+# 📌 Sobre o Projeto
 
 O **MedExpress** é uma plataforma de e-commerce farmacêutico onde usuários podem navegar livremente pelos produtos sem a necessidade de login.
 
 A autenticação é opcional e exigida apenas para ações sensíveis, como:
 
-- Finalização de compras  
-- Acompanhamento de pedidos  
-- Operações relacionadas ao usuário  
+- Finalização de compras
+- Acompanhamento de pedidos
+- Operações relacionadas ao usuário
 
 Essa abordagem melhora a experiência do usuário, permitindo acesso rápido ao catálogo sem barreiras iniciais.
 
 ---
 
-## 🚀 Funcionalidades
+# 🚀 Funcionalidades
 
-- Navegação de produtos sem login  
-- Cadastro e autenticação de usuários  
-- Criação de pedidos  
-- Rastreamento de pedidos em tempo real  
+- Navegação de produtos sem login
+- Cadastro e autenticação de usuários
+- Criação de pedidos
+- Rastreamento de pedidos em tempo real
 
-### 📦 Status dos pedidos:
-- PROCESSANDO  
-- ENVIADO  
-- ENTREGUE  
+## 📦 Status dos Pedidos
 
----
-
-## 🧠 Arquitetura do Sistema
-
-O sistema foi projetado com base em duas abordagens principais:
+- `PROCESSANDO`
+- `ENVIADO`
+- `ENTREGUE`
 
 ---
 
-### 🔷 Arquitetura Hexagonal (Ports and Adapters)
+# 🧠 Arquitetura do Sistema
 
-A aplicação é organizada de forma que o núcleo (regras de negócio) seja independente de tecnologias externas.
-
-- O **core** contém as entidades e regras (Pedido, Produto, Usuário)  
-- As interações externas são feitas por meio de **ports (interfaces)**  
-- As implementações são feitas por **adapters (API, banco, mensageria)**  
-
-#### ✔ Benefícios:
-- Baixo acoplamento  
-- Facilidade de manutenção  
-- Flexibilidade tecnológica  
+O sistema foi projetado utilizando duas abordagens principais:
 
 ---
 
-### 🔶 Arquitetura Event-Driven
+## 🔷 Arquitetura Hexagonal (Ports and Adapters)
 
-O sistema utiliza processamento orientado a eventos, permitindo que os pedidos sejam tratados de forma assíncrona.
+A aplicação é organizada de forma que o núcleo do sistema seja independente de tecnologias externas.
 
-#### 🔄 Fluxo:
+### Estrutura
 
-Cliente realiza pedido  
-→ Evento de pedido é publicado  
-→ Enviado para fila  
-→ Worker consome  
-→ Processa pedido  
-→ Novo evento de status  
-→ Atualização no frontend  
+- O **Core** contém:
+  - Entidades
+  - Casos de uso
+  - Regras de negócio
 
-#### ✔ Benefícios:
-- Desacoplamento entre componentes  
-- Escalabilidade  
-- Processamento não bloqueante  
+- As integrações externas acontecem através de:
+  - **Ports (interfaces)**
+  - **Adapters (implementações)**
 
----
+### ✔ Benefícios
 
-## 🏗️ Componentes do Sistema
-
-- **Frontend** → Interface do usuário  
-- **Backend API** → Regras de negócio  
-- **Broker (ActiveMQ)** → Fila de mensagens  
-- **Worker** → Processamento assíncrono  
-- **WebSocket** → Atualização em tempo real  
+- Baixo acoplamento
+- Alta manutenibilidade
+- Facilidade de testes
+- Flexibilidade tecnológica
 
 ---
 
-## 🛠️ Tecnologias
+## 🔶 Arquitetura Event-Driven
 
-- Java  
-- Spring Boot  
-- React  
-- ActiveMQ  
-- WebSocket  
-- Docker  
-- Git  
+O sistema utiliza processamento orientado a eventos para permitir comunicação assíncrona entre os componentes.
+
+## 🔄 Fluxo do Pedido
+
+```text
+Cliente realiza pedido
+        ↓
+Evento de pedido publicado
+        ↓
+ActiveMQ recebe mensagem
+        ↓
+Worker consome evento
+        ↓
+Pedido processado
+        ↓
+Novo evento de status
+        ↓
+Frontend atualizado em tempo real
+```
+
+### ✔ Benefícios
+
+- Desacoplamento entre serviços
+- Escalabilidade
+- Processamento não bloqueante
+- Melhor tolerância a falhas
 
 ---
 
-## 🎨 Protótipo (Figma)
+# 🏗️ Componentes do Sistema
 
-O design da interface foi desenvolvido no Figma, incluindo as principais telas do sistema:
+| Componente | Responsabilidade |
+|---|---|
+| Frontend | Interface do usuário |
+| Backend API | Regras de negócio |
+| PostgreSQL | Persistência de dados |
+| ActiveMQ | Broker de mensageria |
+| Worker | Processamento assíncrono |
+| WebSocket | Atualização em tempo real |
 
-- Página inicial (catálogo de produtos)  
-- Tela de login/cadastro  
-- Fluxo de navegação entre telas  
+---
 
-👉 [Acessar protótipo](https://www.figma.com/site/0UWqvwXKueswp96giWlsnh/Prot%C3%B3tipo-Figma---MedExpress?node-id=0-1&t=N9Xlb3XNffvtx5n0-1)
+# 🛠️ Tecnologias
 
-## 📦 Estrutura do projeto
+- Java
+- Spring Boot
+- React
+- PostgreSQL
+- ActiveMQ
+- WebSocket
+- Docker
+- Git
+
+---
+
+# 🎨 Protótipo (Figma)
+
+O design da interface foi desenvolvido no Figma, incluindo:
+
+- Página inicial
+- Catálogo de produtos
+- Login e cadastro
+- Fluxo de navegação
+
+👉 [Acessar Protótipo](https://www.figma.com/site/0UWqvwXKueswp96giWlsnh/Prot%C3%B3tipo-Figma---MedExpress?node-id=0-1&t=N9Xlb3XNffvtx5n0-1)
+
+---
+
+# 📦 Estrutura do Projeto
+
+```text
+medexpress/
 │
 ├── frontend/
 ├── backend/
 ├── worker/
 ├── docker/
+├── docker-compose.yml
 ├── README.md
-├── .gitignore
+└── .gitignore
+```
 
 ---
 
-## 🏅 Qualidade
+# 🐳 Ambiente com Docker Compose
 
-### 📄 Plano de Testes
+O projeto utiliza Docker Compose para orquestrar os serviços necessários da aplicação.
 
-O sistema **MedExpress** será validado por meio de testes funcionais e não funcionais, garantindo que todas as funcionalidades operem corretamente e atendam aos requisitos definidos.
+## ▶️ Subindo os Serviços
 
-#### 🎯 Objetivo
-Garantir que o sistema:
-- Funcione corretamente para o usuário final
-- Seja confiável e seguro
-- Suporte múltiplos acessos simultâneos
-- Entregue uma boa experiência de uso
+Execute na raiz do projeto:
 
----
+```bash
+docker compose up -d
+```
 
-### 🧪 Cenários de Teste
+Ou:
 
-#### 🔐 Autenticação
-- Login com dados válidos → deve autenticar
-- Login com dados inválidos → deve exibir erro
-- Cadastro de novo usuário → deve criar conta com sucesso
-
-#### 🛍️ Navegação de Produtos
-- Acessar catálogo sem login → deve funcionar normalmente
-- Visualizar detalhes de um produto → deve exibir informações corretas
-
-#### 🛒 Carrinho e Pedido
-- Adicionar produto ao carrinho → deve incrementar corretamente
-- Remover produto → deve atualizar o carrinho
-- Finalizar compra sem login → deve solicitar autenticação
-- Finalizar compra logado → deve criar pedido
-
-#### 📦 Rastreamento de Pedido
-- Pedido criado → status inicial **PROCESSANDO**
-- Atualização via sistema → status muda para **ENVIADO**
-- Entrega finalizada → status **ENTREGUE**
-- Atualização em tempo real → frontend deve refletir mudanças
-
-#### 🔄 Processamento Assíncrono
-- Envio de pedido → evento deve ser publicado
-- Evento enviado para fila → deve ser processado
-- Worker consome mensagem → pedido processado corretamente
-- Atualização de status → refletida no sistema
+```bash
+docker-compose up -d
+```
 
 ---
 
-### ⚙️ Requisitos Não-Funcionais
+# 📄 docker-compose.yml
 
-#### 🚀 Performance
-- O sistema deve responder em até **2 segundos**
-- 
-#### 🔒 Segurança
-- Dados sensíveis devem ser protegidos
-- Autenticação obrigatória para operações críticas
-  
-#### 📈 Escalabilidade
-- Sistema preparado para crescimento de usuários
-- Uso de mensageria (**ActiveMQ**) para processamento assíncrono
+```yaml
+services:
 
-#### 🔄 Disponibilidade
-- Sistema deve ter alta disponibilidade
-- Falhas no backend não devem impactar o frontend
+  # 🐘 PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: medexpress-postgres
 
-#### 🔧 Manutenibilidade
-- Arquitetura baseada em **Hexagonal Architecture**
-- Baixo acoplamento entre componentes
-- Facilidade de manutenção e evolução
+    environment:
+      POSTGRES_DB: medexpress
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
 
-#### 🌐 Usabilidade
-- Interface simples e intuitiva
-- Navegação sem necessidade de login
-- Feedback visual claro ao usuário
-  
----
+    ports:
+      - "5432:5432"
 
-#### 🚀Subindo o ActiveMQ com Docker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-Execute o comando abaixo para iniciar o broker de mensageria:
+    restart: always
 
-docker run -d \
-  -p 8161:8161 \
-  -p 61616:61616 \
-  --name activemq \
-  rmohr/activemq
+  # 📬 ActiveMQ
+  activemq:
+    image: rmohr/activemq:latest
+    container_name: medexpress-activemq
 
-  ou 
+    ports:
+      - "61616:61616"
+      - "8161:8161"
 
-docker run -d -p 8161:8161 -p 61616:61616 --name activemq rmohr/activemq
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: adminpassword
 
-## 📊 Diagramas da Arquitetura
+    restart: always
 
-### 🔹 Contexto (C4 - Nível 1)
-Representa a visão geral do sistema e sua interação com usuários e sistemas externos.
-
-![Contexto](./diagramas/Contexto.jpeg)
+# 💾 Persistência dos dados
+volumes:
+  postgres_data:
+```
 
 ---
 
-### 🔹 Containers (C4 - Nível 2)
-Mostra os principais blocos da aplicação, como serviços, APIs e banco de dados.
+# 💾 Persistência de Dados
 
-![Containers](./diagramas/Container.jpeg)
+A persistência funciona através do volume Docker:
+
+```yaml
+volumes:
+  - postgres_data:/var/lib/postgresql/data
+```
+
+## 🔍 Como isso funciona?
+
+O Docker cria um volume chamado:
+
+```text
+postgres_data
+```
+
+Esse volume armazena fisicamente os dados do PostgreSQL fora do container.
+
+### ✔ Vantagens
+
+- Os dados não são perdidos ao reiniciar o container
+- Mesmo removendo o container, os dados continuam salvos
+- Facilita backup e recuperação
 
 ---
 
-### 🔹 Componentes / Classes (C4 - Nível 3)
-Detalha a estrutura interna do sistema, incluindo classes e responsabilidades.
+## 📂 Fluxo da Persistência
 
-![Diagrama de Classes](./diagramas/Diagrama%20de%20Classes.jpeg)
+```text
+Container PostgreSQL
+        │
+        ▼
+/var/lib/postgresql/data
+        │
+        ▼
+Volume Docker: postgres_data
+        │
+        ▼
+Dados persistidos no host
+```
+
+---
+
+## 🧹 Comandos Úteis
+
+### Parar os containers
+
+```bash
+docker compose down
+```
+
+### Remover containers + volumes
+
+```bash
+docker compose down -v
+```
+
+⚠️ Esse comando remove os dados persistidos do PostgreSQL.
+
+---
+
+# 📬 ActiveMQ
+
+## 🔗 Painel Administrativo
+
+Acesse:
+
+```text
+http://localhost:8161
+```
+
+## 🔐 Credenciais
+
+```text
+Usuário: admin
+Senha: adminpassword
+```
+
+---
+
+# 📊 Diagramas da Arquitetura
+
+## 🔹 Contexto (C4 - Nível 1)
+
+Representa a visão geral do sistema e interação com usuários e sistemas externos.
+
+```text
+./diagramas/Contexto.jpeg
+```
+
+---
+
+## 🔹 Containers (C4 - Nível 2)
+
+Mostra os principais blocos da aplicação.
+
+```text
+./diagramas/Container.jpeg
+```
+
+---
+
+## 🔹 Componentes / Classes (C4 - Nível 3)
+
+Detalha responsabilidades internas do sistema.
+
+```text
+./diagramas/Diagrama de Classes.jpeg
+```
+
+---
+
+# 🏅 Qualidade
+
+## 📄 Plano de Testes
+
+O sistema será validado por testes funcionais e não funcionais.
+
+---
+
+## 🧪 Cenários de Teste
+
+### 🔐 Autenticação
+
+- Login válido → autenticar usuário
+- Login inválido → exibir erro
+- Cadastro → criar conta
+
+### 🛍️ Navegação de Produtos
+
+- Navegar sem login
+- Visualizar detalhes dos produtos
+
+### 🛒 Carrinho e Pedido
+
+- Adicionar produto
+- Remover produto
+- Finalizar compra autenticado
+- Solicitar login quando necessário
+
+### 📦 Rastreamento
+
+- Pedido inicia como `PROCESSANDO`
+- Atualização para `ENVIADO`
+- Finalização em `ENTREGUE`
+- Atualização em tempo real via WebSocket
+
+### 🔄 Processamento Assíncrono
+
+- Publicação de eventos
+- Consumo via Worker
+- Atualização correta do sistema
+
+---
+
+# ⚙️ Requisitos Não Funcionais
+
+## 🚀 Performance
+
+- Resposta em até 2 segundos
+
+## 🔒 Segurança
+
+- Proteção de dados sensíveis
+- Autenticação para operações críticas
+
+## 📈 Escalabilidade
+
+- Arquitetura preparada para crescimento
+- Uso de mensageria assíncrona
+
+## 🔄 Disponibilidade
+
+- Alta disponibilidade
+- Tolerância a falhas
+
+## 🔧 Manutenibilidade
+
+- Arquitetura Hexagonal
+- Baixo acoplamento
+- Facilidade de evolução
+
+## 🌐 Usabilidade
+
+- Interface intuitiva
+- Navegação sem login
+- Feedback visual claro
+
+---
+
+# 🏗️ Visão Geral da Arquitetura
+
+```text
+    Frontend
+        │
+        ▼
+Backend API (Spring Boot)
+        │
+ ┌──────┴──────┐
+ ▼             ▼
+PostgreSQL   ActiveMQ
+                    │
+                    ▼
+                 Worker
+                    │
+                    ▼
+                WebSocket
+```
+
+---
+
+# 👨‍💻 Autor
+
+Projeto desenvolvido para fins acadêmicos e estudo de arquitetura distribuída, mensageria e sistemas assíncronos.
