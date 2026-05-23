@@ -167,13 +167,11 @@ Garantir que o sistema:
 
 #### 🚀 Performance
 - O sistema deve responder em até **2 segundos**
-- Deve suportar múltiplos usuários simultâneos
-
+- 
 #### 🔒 Segurança
 - Dados sensíveis devem ser protegidos
 - Autenticação obrigatória para operações críticas
-- Uso de HTTPS em ambiente de produção
-
+  
 #### 📈 Escalabilidade
 - Sistema preparado para crescimento de usuários
 - Uso de mensageria (**ActiveMQ**) para processamento assíncrono
