@@ -317,7 +317,60 @@ Mostra os principais blocos da aplicação.
 
 Detalha responsabilidades internas do sistema.
 
-![Diagrama de Classes](./diagramas/Diagrama%20de%20Classes.jpeg)
+![Diagrama de Classes# 📊 Diagrama de Classes
+
+```mermaid
+classDiagram
+
+class User {
+    +Integer id
+    +String name
+    +String email
+    +String password
+}
+
+class Product {
+    +Integer id
+    +String name
+    +BigDecimal price
+    +String URL_IMAGE
+    +String description
+}
+
+class CartItem {
+    +Integer id
+    +Integer quantity
+}
+
+class Order {
+    +Integer id
+    +LocalDateTime moment
+    +OrderStatus status
+}
+
+class OrderItem {
+    +Integer id
+    +Integer quantity
+    +BigDecimal price
+}
+
+class OrderStatus {
+    <<enumeration>>
+    PROCESSANDO
+    ENVIADO
+    ENTREGUE
+}
+
+User "1" --> "*" CartItem : possui
+Product "1" --> "*" CartItem : relacionado
+
+User "1" --> "*" Order : realiza
+
+Order "1" --> "*" OrderItem : contém
+Product "1" --> "*" OrderItem : associado
+
+Order --> OrderStatus : status
+```
 
 ---
 
