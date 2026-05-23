@@ -317,7 +317,7 @@ Mostra os principais blocos da aplicação.
 
 Detalha responsabilidades internas do sistema.
 
-![Diagrama de Classes# 📊 Diagrama de Classes
+📊 Diagrama de Classes
 
 ```mermaid
 classDiagram
