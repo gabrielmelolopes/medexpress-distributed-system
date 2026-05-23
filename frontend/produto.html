@@ -13,7 +13,7 @@
 
 <div id="overlay" class="overlay"></div>
 
-<!-- ── HEADER ────────────────────────────────────────────────-->
+<!--HEADER-->
 <header class="top-bar">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container-fluid px-4 align-items-center gap-3">
@@ -45,7 +45,7 @@
     </nav>
 </header>
 
-<!-- ── BREADCRUMB ────────────────────────────────────────────-->
+<!--BREADCRUMB-->
 <div class="bg-white border-bottom py-2">
     <div class="container-fluid px-4">
         <nav aria-label="breadcrumb">
@@ -57,7 +57,7 @@
     </div>
 </div>
 
-<!-- ── CONTEÚDO ───────────────────────────────────────────────-->
+<!--  CONTEÚDO -->
 <main class="produto-page">
     <div class="container-fluid px-4">
 
@@ -145,7 +145,7 @@
     </div>
 </main>
 
-<!-- ── SIDEBAR CARRINHO ───────────────────────────────────────-->
+<!-- SIDEBAR CARRINHO -->
 <div id="sidebarCarrinho" class="carrinho">
     <div class="carrinho-header">
         <h5 class="mb-0"><i class="bi bi-cart3 me-2"></i>Meu Carrinho</h5>
@@ -163,7 +163,7 @@
     </div>
 </div>
 
-<!-- ── TOAST ──────────────────────────────────────────────────-->
+<!--  TOAST -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1100">
     <div id="toastCarrinho" class="toast align-items-center text-bg-success border-0" role="alert">
         <div class="d-flex">
@@ -204,13 +204,13 @@
         document.getElementById('produtoDescricao').textContent = produto.descricao;
         document.getElementById('produtoPreco').textContent   = `R$ ${brl(produto.preco)}`;
 
-        // Categoria — o back não retorna, então exibe genérico
+        // Categoria - o back não retorna, então exibe genérico
         document.getElementById('produtoCategoria').textContent = 'Produto';
 
-        // Avaliação — o back não retorna, omite
+        // Avaliação - o back não retorna, omite
         document.getElementById('produtoAvaliacao').style.display = 'none';
 
-        // Desconto — não temos precoOriginal no back, omite
+        // Desconto - não temos precoOriginal no back, omite
         document.getElementById('produtoPrecoOriginal').style.display = 'none';
 
         // Mostra os dados, esconde skeleton
