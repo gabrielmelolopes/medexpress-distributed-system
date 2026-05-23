@@ -301,9 +301,7 @@ Senha: adminpassword
 
 Representa a visão geral do sistema e interação com usuários e sistemas externos.
 
-```text
-./diagramas/Contexto.jpeg
-```
+![Contexto](./diagramas/Contexto.jpeg)
 
 ---
 
@@ -311,9 +309,7 @@ Representa a visão geral do sistema e interação com usuários e sistemas exte
 
 Mostra os principais blocos da aplicação.
 
-```text
-./diagramas/Container.jpeg
-```
+![Containers](./diagramas/Container.jpeg)
 
 ---
 
@@ -321,9 +317,7 @@ Mostra os principais blocos da aplicação.
 
 Detalha responsabilidades internas do sistema.
 
-```text
-./diagramas/Diagrama de Classes.jpeg
-```
+![Diagrama de Classes](./diagramas/Diagrama%20de%20Classes.jpeg)
 
 ---
 
