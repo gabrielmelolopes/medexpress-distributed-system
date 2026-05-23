@@ -11,7 +11,8 @@ const KEY_USUARIO  = 'medexpress_usuario';
 const KEY_REDIRECT = 'medexpress_redirect';
 const KEY_PRODUTO  = 'medexpress_produto_id';
 
-/* Chave do carrinho isolada por usuário
+/* 
+   Chave do carrinho isolada por usuário
    Logado:     medexpress_carrinho_<userId>
    Não logado: medexpress_carrinho_guest
  */
@@ -155,7 +156,7 @@ function carregarCarrinho() {
 
 /*
    CARRINHO — operações locais
-   */
+*/
 function adicionarItemLocal(carrinho, produto, quantidade) {
     const copia = carrinho.map(i => ({ ...i }));
     const item  = copia.find(i => i.produto.id === produto.id);
