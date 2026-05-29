@@ -18,8 +18,8 @@ public class Order {
     private LocalDateTime moment;
 
     /*
-     * @JsonIgnoreProperties("password"): serializa o cliente mas omite a senha.
-     * Evita expor dados sensíveis na resposta do POST /orders.
+    @JsonIgnoreProperties("password"): serializa o cliente mas omite a senha.
+    Evita expor dados sensíveis na resposta do POST /orders.
      */
     @JsonIgnoreProperties({"password", "hibernateLazyInitializer"})
     @ManyToOne(fetch = FetchType.EAGER)
