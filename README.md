@@ -129,7 +129,7 @@ O design da interface foi desenvolvido no Figma, incluindo:
 - Login e cadastro
 - Fluxo de navegação
 
-👉 [Acessar Protótipo]([https://www.figma.com/site/0UWqvwXKueswp96giWlsnh/Prot%C3%B3tipo-Figma---MedExpress?node-id=0-1&t=N9Xlb3XNffvtx5n0-1](https://www.figma.com/site/vf9dDm9gXnqdLLtdXOuwW3/Prot%C3%B3tipo-Figma---MedExpress--c%C3%B3pia-?node-id=0-1&p=f&t=ybbjCbzqsBJmwQ2C-0))
+👉 [Acessar Protótipo](https://www.figma.com/site/vf9dDm9gXnqdLLtdXOuwW3/Prot%C3%B3tipo-Figma---MedExpress--c%C3%B3pia-?node-id=2005-356&t=ybbjCbzqsBJmwQ2C-1)
 
 ---
 
