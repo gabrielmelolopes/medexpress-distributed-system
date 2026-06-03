@@ -1,0 +1,30 @@
+services:
+  # 1. Nosso Banco de Dados PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: medexpress-postgres
+    environment:
+      POSTGRES_DB: medexpress
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  # 2. Nosso Servidor de Mensageria ActiveMQ
+  activemq:
+    image: rmohr/activemq:latest
+    container_name: medexpress-activemq
+    ports:
+      - "61616:61616" # Comunicação como Java
+      - "8161:8161"   # Navegador
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: adminpassword
+    restart: always
+
+# 3. Definição dos Volumes para persistência de dados
+volumes:
+  postgres_data:
